@@ -202,7 +202,7 @@ describe('intervals, markers, layouts and DB v2', () => {
     const upgraded = createDb(name);
     await upgraded.open();
     expect(await upgraded.wells.toArray()).toHaveLength(1);
-    expect(upgraded.verno).toBe(2);
+    expect(upgraded.verno).toBe(3); // v1 -> v3 upgrade path
     await upgraded.markers.add({ wellId: 1, depth: 5, label: 'ok' });
     expect(await upgraded.markers.count()).toBe(1);
     upgraded.close();

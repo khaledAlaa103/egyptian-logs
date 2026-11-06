@@ -1,6 +1,7 @@
 import { db as defaultDb } from './db.js';
 
-export const WATER_STATUS = ['unknown', 'yes', 'probable', 'no'];
+import { WATER_STATUS } from '../results/constants.js';
+export { WATER_STATUS };
 const now = () => new Date().toISOString();
 
 /** Returns error code or null. top/bottom in metres. */

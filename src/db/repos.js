@@ -3,7 +3,7 @@ import { encodeRows, decodeRows } from './serialize.js';
 
 export const PROJECT_FORMAT = 'welllog-project';
 export const BACKUP_FORMAT = 'welllog-backup';
-export const SCHEMA_VERSION = 2; // 2: adds markers (v1 files remain importable)
+export const SCHEMA_VERSION = 3; // 2: markers, 3: waterSamples (older files remain importable)
 
 const now = () => new Date().toISOString();
 const stripId = ({ id, ...rest }) => rest; // eslint-disable-line no-unused-vars

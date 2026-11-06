@@ -98,5 +98,59 @@ Known limits / verify before relying on results:
 - Water quality / TDS conversion is Phase 8; results are stored in `interpretations` and feed the results tables in Phase 7.
 - Desktop view: `start-app.bat` builds the app and opens it at http://localhost:4173 (Electron installer is Phase 11).
 
+## Phase 7 — Excel-like results table and formation analysis ✅
+Done:
+- Results Tables: spreadsheet-like grid (`src/features/results`) with the 20 requested columns (+ Vshale and aquifer class available): inline editing (double-click, Enter/F2, or just type), Tab/Enter commit, arrows and Shift+arrows (range), Delete to clear, Ctrl+C / Ctrl+V as tab-separated text (works with Excel), column sort, per-column filters (text, `>10`, `<=5`, `2..8`), row selection, bulk edit of lithology/status/class/confidence/interpretation/notes/name, add interval, delete selected, automatic numbering and thickness, validation on every cell (invalid input stays in the editor with the reason and nothing is saved; overlaps and order rejected).
+- Unit conversion: depth (m/ft/cm), resistivity (Ω·m/Ω·cm/Ω·ft), GR, porosity & Sw (v/v or %), EC (mS/m, µS/cm, mS/cm, S/m), TDS (mg/L, g/L). Stored canonical; display and typing use the chosen unit.
+- Customisable columns: show/hide any column; columns without data in the well are marked "no data"; the curve feeding GR / shallow Rd / deep Rd / EC can be chosen.
+- Derived values from the logs (arithmetic mean; resistivities by geometric mean; half-open interval) and from a chosen saved interpretation run. Each cell is classified measured / corrected / calculated / estimated / manual and carries a trace (curve or run, statistic, sample count, interval, methods and equations). Direct Rt is "estimated", never "corrected". EC from the borehole-fluid log is flagged as not formation water.
+- Typing in a calculated column stores a manual value (marked ✎) with an editable source note and status; it can be cleared.
+- Automatic recalculation: results follow edits to intervals, logs and the selected run immediately.
+- Save/restore: autosave per edit, named snapshots of the whole table with restore, view settings (columns, units, sort, filters, run) saved per well.
+- Export: Excel (Results, Status, Traceability, Info sheets) and CSV, in the display units shown in the headers.
+- Formation Analysis: summary cards (TD, intervals, water-bearing count and thickness), profiles with formation bands (click to select), per-interval statistics with n/min/max, interval comparison, data-quality warnings (gaps, below TD, thin intervals, no log coverage, water-bearing but clayey, Archie refused, Sw clipped, direct-Rt estimate), and screening of potential water-bearing zones using cut-offs you enter (none by default; max 'probable', never 'yes'; confidence = completeness of evidence; applies only to intervals still 'unknown').
+- Tests: 161 passing (pure engine incl. float/units/filters/screening/quality/export, DB helpers, grid UI, formation page). Build OK.
+
+Bugs found and fixed during verification: key presses in filter boxes started cell edits; clicking inside the cell editor stole focus; fast typing after the first key lost characters (editor focused too late).
+
+Known limits:
+- Interval statistics use sample means; no thickness-weighted or median option yet.
+- Phase 8 will fill TDS/EC-based water-quality values; until then TDS is a manual (lab) entry.
+- The grid is not virtualised (fine for hundreds of intervals).
+- Browser check used scripted events for some interactions (the automation tool sends text without key events).
+
+## Phase 8 — Water quality and TDS ✅
+Done (`src/engine/water/`, `src/db/water.js`, `src/features/water/`):
+- DB v3 (additive): `waterSamples` (direct measurements: laboratory TDS, EC or Rw with temperature, depth, date, source). Export format 3; older files still import.
+- Engine: EC ↔ Rw, temperature normalisation to 25 °C (Arps, or linear α that the user must choose), local calibration of EC25 → TDS by least squares (proportional k, linear a+b·EC, power c·EC^d) with n, RMSE, relative RMSE, R² and valid EC range, or a cited manual factor (source mandatory), prediction with an "outside calibration range" flag, NaCl-equivalent salinity from Rw (empirical chart fit, labelled as an equivalent, not TDS), salinity classes (Winslow & Kister 1956, informational).
+- **No Rt → TDS path exists**: only Rw (water resistivity from the interpretation run) or measured water EC enter the functions. Direct (sample) and indirect (geophysical) results are separate (`basis`) and compared side by side with the % difference.
+- Uncertainty: calibration scatter and the user-supplied Rw uncertainty are combined in quadrature; if either part is unknown the combined value is reported as "not quantified" (never invented).
+- Every result shows equation, inputs with units, temperature reference (25 °C), calibration source/range, assumptions, validity and uncertainty, bilingual (`waterInfo.js`).
+- UI (Water Quality): Samples (validated, unit conversion), Calibration (normalisation, local/manual relation, scatter chart, statistics), Estimate by interval (Rw and temperature from a saved run, estimate, direct sample, optional borehole-fluid EC only under an explicit "represents formation water" confirmation), Converter (single value with full trace). "Apply" writes TDS with its basis, status (estimated/measured), method, EC25, uncertainty, calibration and flags to the interval; the Results Tables TDS column shows it with its trace. A manual value typed in the table still overrides it.
+- Tests: 188 passing (31 water/engine/UI tests with hand-computed values). Build OK. Visual check in the browser.
+
+Known limits / verify:
+- The NaCl-equivalent formula and the salinity-class limits are published empirical relations; confirm against the references your organisation uses. The EC→TDS relation always needs your own samples or a cited factor.
+- A few percent of EC variation is not modelled by the single-α/Arps normalisation; mixed-ion waters can deviate.
+- (Fixed in Phase 9) An intermittent inline-edit failure in the results grid was a real race: Enter followed by the input losing focus committed twice. The editor now ignores re-entrant commits and focus moves inside the grid.
+
+## Phase 9 — Reports (PDF, Excel, CSV) ✅
+Done (`src/reports/`, `src/features/reports/`, `src/db/reports.js`):
+- Report model (pure): the 18 required sections in order (cover, project, well, equipment, input summary, original images, digitized curves, depth/formation analysis, resistivity, Rw, water quality and TDS, aquifer zones, interpretation tables, equations, assumptions, data quality and uncertainty, conclusions, recommendations). Built from the database by `gatherReportData`; sections can be switched off; numbering stays canonical.
+- Language: the report is generated in Arabic (RTL) or English (LTR) independently of the interface language.
+- Classes: every value carries M measured / C corrected / K calculated / E estimated / U manual, with a legend; direct sample results and indirect estimates are in separate tables.
+- No invented content: missing run/samples/images/calibration produce explicit notices; conclusions contain only facts counted from the data plus the author's own text (shown separately and verbatim); recommendations = the author's text + clearly labelled automatic suggestions.
+- Equations section lists every method used (equation, source, validity); assumptions section lists exactly the parameters the interpreter entered (none assumed by the program); uncertainty is quantified only where its parts are known.
+- Figures: log display with formations/markers, original image thumbnails, EC25–TDS calibration scatter.
+- Export: PDF in two ways — (1) Print / Save as PDF (vector text, selectable; Arabic shaped by the browser), (2) one-click PDF file (page images of the same document via html2canvas + jsPDF, offline, works on Android too). Excel workbook (Results in display units, Status, Traceability, Curves merged by depth, one sheet per report section), results CSV, curves CSV. Report definitions (options and your texts) and, optionally, the generated PDF are stored in the project (`reports` table) and can be reopened.
+- Tests: 203 passing (model, Arabic/English, statuses, exports, page-break planner, PDF assembly, UI). Real-browser check: an Arabic report with figures produced a 9-page PDF (2.6 MB, ~4 s) that pdf.js rendered back with correct RTL layout.
+
+Fixed on the way: the results-grid editor race (re-entrant commit/blur), previously masked with test retries.
+
+Known limits:
+- The one-click PDF is image-based (not selectable/searchable); use Print → Save as PDF for vector text. Electron (Phase 11) will add a direct vector PDF export.
+- Page footers in the file PDF use Latin text/digits only (well ID and page numbers).
+- Original images are included as downscaled thumbnails (≤ 900 px, max 6).
+
 ## Commands
 - `npm run dev` — dev server; `npm test` — tests; `npm run build` — production build

@@ -8,9 +8,15 @@ import enDig from './en.dig.js';
 import arDig from './ar.dig.js';
 import enInterp from './en.interp.js';
 import arInterp from './ar.interp.js';
+import enRes from './en.res.js';
+import arRes from './ar.res.js';
+import enWq from './en.wq.js';
+import arWq from './ar.wq.js';
+import enRep from './en.rep.js';
+import arRep from './ar.rep.js';
 
 // Feature dictionaries are merged on top of the core ones (top-level keys must not collide).
-export const dictionaries = { en: { ...en, ...enImport, ...enViewer, ...enDig, ...enInterp }, ar: { ...ar, ...arImport, ...arViewer, ...arDig, ...arInterp } };
+export const dictionaries = { en: { ...en, ...enImport, ...enViewer, ...enDig, ...enInterp, ...enRes, ...enWq, ...enRep }, ar: { ...ar, ...arImport, ...arViewer, ...arDig, ...arInterp, ...arRes, ...arWq, ...arRep } };
 export const LANGS = { en: { dir: 'ltr' }, ar: { dir: 'rtl' } };
 
 /** Resolve a dotted key ("nav.wells") in a language; falls back to English, then the key. */

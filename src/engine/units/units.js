@@ -25,6 +25,8 @@ export const UNIT_GROUPS = {
       K: { toCanon: (v) => v - 273.15, fromCanon: (v) => v + 273.15 },
     },
   },
+  // Total dissolved solids (concentration in water)
+  tds: { canon: 'mg/L', units: { 'mg/L': lin(1), 'g/L': lin(1000) } },
   pef: { canon: 'b/e', units: { 'b/e': lin(1) } },
   pct: { canon: '%', units: { '%': lin(1) } },
   ppm: { canon: 'ppm', units: { ppm: lin(1) } },

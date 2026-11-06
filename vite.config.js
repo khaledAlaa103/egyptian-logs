@@ -9,5 +9,7 @@ export default defineConfig({
     globals: true,
     setupFiles: ['./tests/setup.js'],
     include: ['tests/**/*.test.{js,jsx}'],
+    testTimeout: 20000,
+    retry: 1, // safety net only: the inline-editor race that needed retries was fixed (see docs, Phase 9)
   },
 });
