@@ -8,7 +8,7 @@ export const DB_NAME = 'welllog-pro';
  */
 export const WELL_CHILD_TABLES = [
   'logMeasurements', 'logImages', 'digitizedCurves', 'formations',
-  'interpretations', 'calcSettings', 'reports',
+  'interpretations', 'calcSettings', 'reports', 'markers',
 ];
 
 export const ALL_TABLES = ['projects', 'wells', ...WELL_CHILD_TABLES, 'preferences'];
@@ -28,6 +28,11 @@ export function createDb(name = DB_NAME) {
     calcSettings: '++id, projectId, wellId',
     reports: '++id, projectId, wellId',
     preferences: 'key',
+  });
+
+  // ---- Version 2 (Phase 4): depth markers / annotations for the log viewer. Additive: no data change.
+  db.version(2).stores({
+    markers: '++id, wellId, depth',
   });
 
   return db;

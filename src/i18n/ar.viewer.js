@@ -1,0 +1,23 @@
+export default {
+  viewer: {
+    formations: 'التكوينات', water: 'مياه', canvasLabel: 'مخطط لوج البئر',
+    trackTitles: { gr: 'GR / SP / CAL', res: 'المقاومية', por: 'المسامية / الصوتي', fluid: 'السائل / الحرارة', other: 'أخرى' },
+    newTrack: 'مسار جديد', addTrack: 'إضافة مسار', resetLayout: 'إعادة التخطيط', track: 'المسار', title: 'العنوان', width: 'العرض',
+    moveUp: 'تحريك لأعلى', moveDown: 'تحريك لأسفل', visible: 'ظاهر', color: 'اللون', noData: 'لا بيانات',
+    addCurveTo: 'إضافة منحنى إلى المسار', addCurve: 'إضافة منحنى', notShown: 'منحنيات غير معروضة',
+    formationsTitle: 'فترات التكوينات', top: 'القمة (م)', bottom: 'القاع (م)', fname: 'الاسم', waterStatus: 'حامل للمياه',
+    noFormations: 'لا توجد فترات بعد.', newTop: 'قمة جديدة', newBottom: 'قاع جديد', newName: 'اسم جديد', newWater: 'حالة المياه الجديدة',
+    addFormation: 'إضافة فترة',
+    formationHint: 'الأعماق بالمتر. لا يجوز تداخل الفترات. حالة حمل المياه هنا تفسير يدوي وليست نتيجة حساب.',
+    markersTitle: 'العلامات', markerLabel: 'نص العلامة', addMarker: 'إضافة علامة عند المؤشر',
+    markerHint: 'انقر على اللوج لاختيار عمق أولًا.',
+    water_unknown: 'غير معروف', water_yes: 'حامل للمياه', water_probable: 'محتمل', water_no: 'غير حامل للمياه',
+    ferr: { required: 'القمة والقاع مطلوبان', number: 'يجب أن تكون الأعماق أرقامًا', negative: 'لا يمكن أن يكون العمق سالبًا', order: 'يجب أن يكون القاع أعمق من القمة', overlap: 'الفترة تتداخل مع فترة أخرى' },
+    noCurves: 'لا توجد منحنيات لوج لهذا البئر بعد.', noCurvesHint: 'استورد البيانات أو أدخلها من "استيراد اللوجات".',
+    depthRange: 'نطاق العمق', zoomIn: 'تكبير', zoomOut: 'تصغير', panUp: 'تحريك لأعلى', panDown: 'تحريك لأسفل', fit: 'عرض الكل',
+    from: 'من', to: 'إلى', exportPng: 'تصدير PNG', print: 'طباعة',
+    help: 'العجلة/القرص: تكبير · السحب: تحريك · النقر: تحديد عمق · اسحب حافة المسار في الترويسة: تغيير العرض · الأسهم و +/− و Home: لوحة المفاتيح.',
+    readout: 'القيم عند المؤشر', clickToSelect: 'انقر على اللوج لقراءة القيم عند عمق معين.', unnamed: '(بدون اسم)',
+    noValue: 'لا بيانات', clearCursor: 'مسح المؤشر', tabs: { layout: 'المسارات والمنحنيات', intervals: 'الفترات والعلامات' },
+  },
+};

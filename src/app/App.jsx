@@ -6,6 +6,7 @@ import Settings from '../features/settings/Settings.jsx';
 import Projects from '../features/projects/Projects.jsx';
 import Wells from '../features/wells/Wells.jsx';
 import ImportPage from '../features/import/ImportPage.jsx';
+import ViewerPage from '../features/viewer/ViewerPage.jsx';
 import ModulePlaceholder from '../features/ModulePlaceholder.jsx';
 
 export default function App() {
@@ -17,7 +18,8 @@ export default function App() {
         <Route path="/projects" element={<Projects />} />
         <Route path="/wells" element={<Wells />} />
         <Route path="/import" element={<ImportPage />} />
-        {NAV_ITEMS.filter((n) => !['dashboard', 'settings', 'projects', 'wells', 'import'].includes(n.id)).map((n) => (
+        <Route path="/viewer" element={<ViewerPage />} />
+        {NAV_ITEMS.filter((n) => !['dashboard', 'settings', 'projects', 'wells', 'import', 'viewer'].includes(n.id)).map((n) => (
           <Route key={n.id} path={n.path} element={<ModulePlaceholder item={n} />} />
         ))}
         <Route path="*" element={<Navigate to="/" replace />} />

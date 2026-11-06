@@ -1,0 +1,23 @@
+export default {
+  viewer: {
+    formations: 'Formations', water: 'water', canvasLabel: 'Well log chart',
+    trackTitles: { gr: 'GR / SP / CAL', res: 'Resistivity', por: 'Porosity / Sonic', fluid: 'Fluid / Temp', other: 'Other' },
+    newTrack: 'New track', addTrack: 'Add track', resetLayout: 'Reset layout', track: 'Track', title: 'Title', width: 'Width',
+    moveUp: 'Move up', moveDown: 'Move down', visible: 'Visible', color: 'Color', noData: 'no data',
+    addCurveTo: 'Add curve to track', addCurve: 'add curve', notShown: 'Curves not displayed',
+    formationsTitle: 'Formation intervals', top: 'Top (m)', bottom: 'Bottom (m)', fname: 'Name', waterStatus: 'Water-bearing',
+    noFormations: 'No intervals yet.', newTop: 'New top', newBottom: 'New bottom', newName: 'New name', newWater: 'New water status',
+    addFormation: 'Add interval',
+    formationHint: 'Depths in metres. Intervals may not overlap. Water-bearing status here is a manual interpretation, not a calculation.',
+    markersTitle: 'Markers', markerLabel: 'Marker label', addMarker: 'Add marker at cursor',
+    markerHint: 'Click the log to select a depth first.',
+    water_unknown: 'Unknown', water_yes: 'Water-bearing', water_probable: 'Probable', water_no: 'Not water-bearing',
+    ferr: { required: 'Top and bottom are required', number: 'Depths must be numbers', negative: 'Depths cannot be negative', order: 'Bottom must be deeper than top', overlap: 'Interval overlaps another one' },
+    noCurves: 'This well has no log curves yet.', noCurvesHint: 'Import or enter data in "Import Logs".',
+    depthRange: 'Depth range', zoomIn: 'Zoom in', zoomOut: 'Zoom out', panUp: 'Pan up', panDown: 'Pan down', fit: 'Fit all',
+    from: 'From', to: 'To', exportPng: 'Export PNG', print: 'Print',
+    help: 'Wheel/pinch: zoom · drag: pan · click: select depth · drag a track edge in the header: resize · arrows, +/−, Home: keyboard.',
+    readout: 'Values at cursor', clickToSelect: 'Click on the log to read values at a depth.', unnamed: '(unnamed)',
+    noValue: 'no data', clearCursor: 'Clear cursor', tabs: { layout: 'Tracks & curves', intervals: 'Intervals & markers' },
+  },
+};

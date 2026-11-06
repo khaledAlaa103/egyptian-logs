@@ -45,5 +45,20 @@ Known limits:
 - Bundle is >500 kB because of SheetJS (acceptable offline; may be code-split later).
 - Stop stale `vite` dev servers (ports 5173–5175) before starting a new one; after installing a dependency the old server serves a broken page.
 
+## Phase 4 — Log viewer and multi-track charts ✅
+Done:
+- DB v2 (additive migration, tested against a real v1 database): `markers` table. Export format version 2 (v1 files still import).
+- Pure viewer modules (`src/viewer/`): scale math (linear, log, reversed), nice depth ticks, log decades, gap-aware interpolation (data gaps are never bridged), pixel-row decimation, zoom/pan clamping, track geometry, default layout built only from curves that exist, and a canvas renderer (`renderLog`) shared by screen, PNG export and print.
+- Viewer page: synchronized tracks sharing one depth axis, resizable tracks (drag a header edge), independent per-curve min/max/scale (linear/log), overlays, colour and visibility controls, track add/remove/reorder, depth unit m/ft (display only), wheel/pinch zoom, drag pan, click to select a depth with values read at the cursor for all curves, keyboard (arrows, +/-, Home), from/to depth inputs, layouts saved per well.
+- Formation intervals (manual, with water-bearing status: unknown/yes/probable/no) drawn as boundaries and highlighted bands across all tracks; depth markers with labels; PNG export and print layout.
+- Tests: 75 passing (geometry, renderer via recording context, defaults, intervals, migration, viewer UI). Build OK. Checked in a real browser with a synthetic seeded well (render, click-select, wheel zoom).
+
+Known limits:
+- Water-bearing status is entered by the user; it is not calculated until Phases 6–8.
+- Canvas drawing is verified by a recording context in tests and visually in the browser, not by pixel comparison.
+- PNG export/print were not exercised in a real browser session.
+- Spectral/NMR curves use automatic display ranges; the neutron/sonic default scales are reversed by convention.
+- Dev servers: after editing the schema, an old `vite` instance serves stale modules; start a fresh one.
+
 ## Commands
 - `npm run dev` — dev server; `npm test` — tests; `npm run build` — production build
