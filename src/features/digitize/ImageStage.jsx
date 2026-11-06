@@ -25,7 +25,7 @@ export default function ImageStage({
     setView({ s, x: (size.w - source.width * s) / 2, y: 4 });
   }, [source, size.w, height]);
 
-  useEffect(() => { fit(); }, [source]); // eslint-disable-line react-hooks/exhaustive-deps
+  useEffect(() => { fit(); }, [source]);  
 
   useEffect(() => {
     const el = wrap.current;
@@ -98,7 +98,7 @@ export default function ImageStage({
         if (p.id === selectedId) { ctx.strokeStyle = '#e11d48'; ctx.lineWidth = 2; ctx.beginPath(); ctx.arc(s.x, s.y, 8, 0, Math.PI * 2); ctx.stroke(); ctx.lineWidth = 1; }
       });
     });
-  }, [source, view, size, height, depthPoints, tracks, curves, activeCurveId, selectedId, lines, roi, crop, live, tool]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [source, view, size, height, depthPoints, tracks, curves, activeCurveId, selectedId, lines, roi, crop, live, tool]);  
 
   // ---------- interaction ----------
   const local = (e) => { const r = ref.current.getBoundingClientRect(); return { x: e.clientX - r.left, y: e.clientY - r.top }; };

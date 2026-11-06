@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { usePrefs } from '../../app/PrefsContext.jsx';
 import { getWorkspaceStats } from '../../db/stats.js';
+import DashboardWell from './DashboardWell.jsx';
 
 const CARDS = ['projects', 'wells', 'logs', 'formations', 'waterZones'];
 const KEYS = { projects: 'projects', wells: 'wells', logs: 'curves', formations: 'formations', waterZones: 'waterZones' };
@@ -61,6 +62,7 @@ export default function Dashboard() {
           <p>{t('dashboard.storageValue')}</p>
         </div>
       </div>
+      <DashboardWell />
     </section>
   );
 }

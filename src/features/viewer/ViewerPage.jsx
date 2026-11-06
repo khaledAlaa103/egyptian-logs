@@ -80,7 +80,7 @@ export default function ViewerPage() {
     return hi - lo < 1 ? [lo, lo + 1] : [lo, hi];
   }, [data, formations]);
   const extentKey = `${wellPk}:${extent[0]}:${extent[1]}`;
-  useEffect(() => { setView({ top: extent[0], bottom: extent[1] }); }, [extentKey]); // eslint-disable-line react-hooks/exhaustive-deps
+  useEffect(() => { setView({ top: extent[0], bottom: extent[1] }); }, [extentKey]);  
 
   const model = useMemo(() => ({ layout, data, formations, markers, custom }), [layout, data, formations, markers, custom]);
 

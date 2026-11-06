@@ -1,5 +1,7 @@
 import { usePrefs } from '../../app/PrefsContext.jsx';
 import DataBackup from './DataBackup.jsx';
+import StorageInfo from './StorageInfo.jsx';
+import { DesktopPanel } from '../../desktop/DesktopUi.jsx';
 
 export default function Settings() {
   const { t, lang, setLang, theme, setTheme } = usePrefs();
@@ -24,6 +26,8 @@ export default function Settings() {
         </label>
       </div>
       <DataBackup />
+      <DesktopPanel />
+      <StorageInfo />
     </section>
   );
 }

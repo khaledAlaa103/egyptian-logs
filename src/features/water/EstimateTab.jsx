@@ -75,7 +75,7 @@ export default function EstimateTab({ w }) {
       )}
 
       {items.length === 0 ? <p className="muted">{t('viewer.noFormations')}</p> : (
-        <div className="table-wrap">
+        <div className="table-wrap" tabIndex={0}>
           <table className="data compact">
             <thead><tr><th>#</th><th>{t('res.col.name')}</th><th className="num">Rw (Ω·m)</th><th className="num">T (°C)</th><th className="num">EC25 (µS/cm)</th>
               <th className="num">{t('wq.tdsEst')} (mg/L)</th><th className="num">±%</th><th className="num">{t('wq.nacl')}</th><th>{t('wq.class')}</th>

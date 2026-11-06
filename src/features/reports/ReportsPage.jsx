@@ -14,6 +14,7 @@ import { resultsToCsv } from '../../results/exportResults.js';
 import { COL, COLUMNS } from '../../results/columns.js';
 import { saveReport, listReports, deleteReport } from '../../db/reports.js';
 import { downloadFile, safeName } from '../../io/download.js';
+import { desktop } from '../../desktop/bridge.js';
 
 const optKey = (w) => `report:options:${w}`;
 const defaults = (lang) => ({ lang, title: '', includeImages: true, runId: null, sections: {}, texts: {}, storePdf: false });
@@ -40,7 +41,7 @@ export default function ReportsPage() {
     let alive = true;
     db.preferences.get(optKey(wellPk)).then((r) => { if (alive) { loaded.current = r?.value || null; setOpt(r?.value || defaults(uiLang)); } });
     return () => { alive = false; };
-  }, [wellPk]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [wellPk]);  
   useEffect(() => {
     if (!wellPk || !opt || opt === loaded.current) return undefined;
     const h = setTimeout(() => db.preferences.put({ key: optKey(wellPk), value: opt }), 500);
@@ -53,7 +54,7 @@ export default function ReportsPage() {
     let alive = true;
     const h = setTimeout(() => gatherReportData(wellPk, { runId: opt.runId }).then((d) => { if (alive) setData(d); }), 250);
     return () => { alive = false; clearTimeout(h); };
-  }, [wellPk, opt?.runId, tick]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [wellPk, opt?.runId, tick]);  
 
   const tr = useMemo(() => (k) => translate(opt?.lang || uiLang, k), [opt?.lang, uiLang]);
   const model = useMemo(() => (data && opt ? buildReportModel(data, opt, tr) : null), [data, opt, tr]);
@@ -72,7 +73,7 @@ export default function ReportsPage() {
       } catch { if (alive) setFigures({}); }
     })();
     return () => { alive = false; };
-  }, [data, opt?.lang, opt?.includeImages, tr]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [data, opt?.lang, opt?.includeImages, tr]);  
 
   const set = (patch) => setOpt((o) => ({ ...o, ...patch }));
   const setText = (k, v) => setOpt((o) => ({ ...o, texts: { ...o.texts, [k]: v } }));
@@ -95,6 +96,14 @@ export default function ReportsPage() {
   const doSave = async () => {
     const id = await saveReport(wellPk, data.well.projectId, { id: opt.savedId, title: model.title, lang: opt.lang, options: opt });
     set({ savedId: id }); setMsg({ ok: true, text: t('rep.ui.savedOk') });
+  };
+  // desktop app: vector PDF straight from the print engine; browser: the print dialog ("Save as PDF")
+  const doPrint = async () => {
+    const d = desktop();
+    if (!d) { window.print(); return; }
+    setBusy('print'); setMsg(null);
+    try { const r = await d.printPdf({ defaultName: `${fileBase}.pdf` }); if (r?.ok) setMsg({ ok: true, text: t('desk.pdfSaved') }); } catch { setMsg({ ok: false, text: t('rep.ui.pdfFail') }); }
+    setBusy(null);
   };
   const doXlsx = () => downloadFile(`${fileBase}.xlsx`, new Blob([reportToWorkbook(model, data, tr)], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' }));
   const doCsv = () => {
@@ -145,7 +154,7 @@ export default function ReportsPage() {
           </div>
 
           <div className="toolbar wrap no-print rep-actions">
-            <button className="btn primary" disabled={!model} onClick={() => window.print()} title={t('rep.ui.printHint')}>{t('rep.ui.printPdf')}</button>
+            <button className="btn primary" disabled={!model} onClick={doPrint} title={t('rep.ui.printHint')}>{t('rep.ui.printPdf')}</button>
             <button className="btn primary" disabled={!model || busy} onClick={doPdf} title={t('rep.ui.pdfHint')}>{busy === 'pdf' ? t('rep.ui.generating') : t('rep.ui.downloadPdf')}</button>
             <button className="btn" disabled={!model} onClick={doXlsx}>{t('rep.ui.exportXlsx')}</button>
             <button className="btn" disabled={!model} onClick={doCsv}>{t('rep.ui.exportCsv')}</button>
@@ -156,7 +165,7 @@ export default function ReportsPage() {
           {msg && <div className={`notice ${msg.ok ? 'ok' : 'bad'} small no-print`} role="status">{msg.text}</div>}
 
           <h3 className="no-print">{t('rep.ui.preview')}</h3>
-          <div className="rpreview">
+          <div className="rpreview" tabIndex={0}>
             <div className="rpaper" ref={docRef}>{model ? <ReportDocument model={model} figures={figures} /> : <p className="muted pad">{t('rep.ui.generating')}</p>}</div>
           </div>
 

@@ -33,6 +33,7 @@ export default {
     vshLimit: 'Clean-formation Vsh limit', vshLimitHelp: 'Archie is applied only at or below this value. Choose it for your formation.', rshHelp: 'Resistivity of adjacent shale.',
     runName: 'Run name', saveRun: 'Save this interpretation', savedOk: 'Interpretation saved.', savedRuns: 'Saved interpretations',
     err: { no_grid_curve: 'Choose a grid curve that has data.' },
+    note: { simandoux_n_ignored: 'The Simandoux form used here assumes n = 2; the n you entered is NOT used for this model. Use Indonesia if you need another n.' },
     diag: 'What could be calculated', profiles: 'Profiles', summaryTitle: 'Summary', mean: 'Mean', methodsTitle: 'Methods, equations and assumptions', tableTitle: 'Results by depth',
     mSource: 'Source', mAssumptions: 'Assumptions', mUncertainty: 'Uncertainty', mValidity: 'Validity range', flags: 'Flags',
     series: { temp: 'Temperature (°C)', ra: 'Ra (apparent)', rt: 'Rt (true)', rxo: 'Rxo', igr: 'GR index', vsh: 'Vshale', phi: 'Porosity', phiE: 'Eff. porosity', rw: 'Rw (Ω·m)', rwa: 'Rwa', f: 'Formation factor', sw: 'Sw', bvw: 'BVW', ri: 'Resistivity index' },

@@ -13,7 +13,7 @@ export function saveInterpretation(wellId, { name, config, result }, db = defaul
   return db.interpretations.add({
     wellId, name: name || '', config, createdAt: now(),
     depth: result.depth, series: result.series, flags: result.flags, summary: result.summary,
-    diagnostics: result.diagnostics, methods: result.methods, flagCounts: result.flagCounts,
+    diagnostics: result.diagnostics, methods: result.methods, flagCounts: result.flagCounts, notes: result.notes || [],
   });
 }
 export const listInterpretations = (wellId, db = defaultDb) => db.interpretations.where('wellId').equals(wellId).toArray();

@@ -60,7 +60,7 @@ export default function Wells() {
     setErrors(errs);
     if (Object.keys(errs).length) return;
     const data = { ...normalizeWell(form), projectId: Number(form.projectId) };
-    if (form.id) { const { id, ...rest } = data; await updateWell(id, rest); } // eslint-disable-line no-unused-vars
+    if (form.id) { const { id, ...rest } = data; await updateWell(id, rest); }  
     else await createWell(data);
     setForm(null);
   };
@@ -114,7 +114,7 @@ export default function Wells() {
       {list.length === 0 ? (
         <div className="card empty"><p>{t('wells.empty')}</p></div>
       ) : (
-        <div className="table-wrap">
+        <div className="table-wrap" tabIndex={0}>
           <table className="data">
             <thead>
               <tr>

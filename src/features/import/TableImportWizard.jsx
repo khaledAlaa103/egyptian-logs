@@ -147,7 +147,7 @@ export default function TableImportWizard({ kind, well, custom }) {
           </div>
 
           <h2>{t('imp.mapping')}</h2>
-          <div className="table-wrap">
+          <div className="table-wrap" tabIndex={0}>
             <table className="data mapping">
               <thead><tr><th>{t('imp.column')}</th><th>{t('imp.sample')}</th><th>{t('imp.role')}</th><th>{t('imp.unit')}</th></tr></thead>
               <tbody>
@@ -195,7 +195,7 @@ export default function TableImportWizard({ kind, well, custom }) {
                 </p>
               )}
               {preview.curves.length > 0 && (
-                <div className="table-wrap">
+                <div className="table-wrap" tabIndex={0}>
                   <table className="data">
                     <thead><tr><th>{t('imp.curve')}</th><th>{t('imp.unitStored')}</th><th className="num">{t('imp.points')}</th>
                       <th className="num">{t('imp.min')}</th><th className="num">{t('imp.max')}</th>

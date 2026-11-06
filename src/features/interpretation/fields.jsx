@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 /** Number field that keeps what the user types; reports undefined when empty, ignores invalid text. */
 export function NumField({ label, value, onChange, unit, help, step = 'any', min }) {
   const [text, setText] = useState(value == null ? '' : String(value));
-  useEffect(() => { if (Number(text) !== value && !(text === '' && value == null)) setText(value == null ? '' : String(value)); }, [value]); // eslint-disable-line react-hooks/exhaustive-deps
+  useEffect(() => { if (Number(text) !== value && !(text === '' && value == null)) setText(value == null ? '' : String(value)); }, [value]);  
   return (
     <label className="ifield">
       <span>{label}{unit ? <em> ({unit})</em> : null}</span>

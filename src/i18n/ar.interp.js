@@ -33,6 +33,7 @@ export default {
     vshLimit: 'حد Vsh للتكوين النظيف', vshLimitHelp: 'يُطبَّق أرتشي فقط عند هذه القيمة أو أقل. اخترها لتكوينك.', rshHelp: 'مقاومية الطين المجاور.',
     runName: 'اسم التشغيل', saveRun: 'حفظ هذا التفسير', savedOk: 'تم حفظ التفسير.', savedRuns: 'التفسيرات المحفوظة',
     err: { no_grid_curve: 'اختر منحنى شبكة يحتوي بيانات.' },
+    note: { simandoux_n_ignored: 'صيغة سيماندو المستخدمة هنا تفترض n = 2؛ قيمة n التي أدخلتها لا تُستخدم مع هذا النموذج. استخدم نموذج إندونيسيا إن احتجت n مختلفة.' },
     diag: 'ما الذي أمكن حسابه', profiles: 'المقاطع', summaryTitle: 'الملخص', mean: 'المتوسط', methodsTitle: 'الطرق والمعادلات والافتراضات', tableTitle: 'النتائج حسب العمق',
     mSource: 'المصدر', mAssumptions: 'الافتراضات', mUncertainty: 'عدم اليقين', mValidity: 'نطاق الصلاحية', flags: 'علامات',
     series: { temp: 'الحرارة (°م)', ra: 'Ra (ظاهرية)', rt: 'Rt (حقيقية)', rxo: 'Rxo', igr: 'مؤشر GR', vsh: 'Vshale', phi: 'المسامية', phiE: 'المسامية الفعالة', rw: 'Rw (Ω·م)', rwa: 'Rwa', f: 'عامل التكوين', sw: 'Sw', bvw: 'BVW', ri: 'مؤشر المقاومية' },

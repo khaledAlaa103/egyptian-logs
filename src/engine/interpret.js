@@ -54,7 +54,7 @@ export function methodsUsed(cfg) {
  * }
  */
 export function runInterpretation(cfg, curves) {
-  const out = { depth: [], series: {}, flags: [], diagnostics: {}, methods: methodsUsed(cfg), errors: [] };
+  const out = { depth: [], series: {}, flags: [], diagnostics: {}, methods: methodsUsed(cfg), errors: [], notes: [] };
   SERIES.forEach((s) => { out.series[s] = []; });
 
   const gridId = cfg.grid?.curveId;
@@ -76,6 +76,9 @@ export function runInterpretation(cfg, curves) {
   const sTemp = S(cfg.temperature?.curveId);
   const pcv = pc.curves || {};
   const sRho = S(pcv.density), sDt = S(pcv.sonic), sN = S(pcv.neutron);
+
+  // Simandoux (this form) is an n = 2 model: say so instead of silently ignoring a different n
+  if (sc.model === 'simandoux' && isNum(sc.n) && sc.n !== 2) out.notes.push('simandoux_n_ignored');
 
   const top = cfg.grid.top ?? -Infinity, bottom = cfg.grid.bottom ?? Infinity;
   const depths = gridCurve.depth.filter((d) => d >= top && d <= bottom);

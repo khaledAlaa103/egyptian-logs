@@ -219,6 +219,7 @@ export function buildReportModel(data, options = {}, tr) {
   const unc = estimates.filter((e) => e.est).map((e) => `#${e.row.cells.number.v}: ${e.est.uncertainty.relPct != null ? `± ${sig(e.est.uncertainty.relPct, 2)} %` : tr('rep.notQuantified')}${e.est.flags.length ? ` (${e.est.flags.map((f) => tr(`wq.flag.${f}`)).join(', ')})` : ''}`);
   sections.push(section('uncertainty', [
     data.warnings.length ? { type: 'list', items: data.warnings.map((w) => `${w.severity === 'warning' ? '⚠ ' : 'ℹ '}${w.fid && fr(w.fid) ? `#${fr(w.fid).cells.number.v} ` : ''}${warnText(w)}`) } : { type: 'notice', kind: 'info', text: tr('fa.noWarnings') },
+    ...((run?.notes || []).map((n) => ({ type: 'notice', kind: 'warn', text: tr(`interp.note.${n}`) }))),
     ...(diagLines.length ? [{ type: 'p', text: tr('rep.diagTitle') }, { type: 'list', items: diagLines }] : []),
     ...(run?.flagCounts && Object.keys(run.flagCounts).length ? [{ type: 'p', text: `${tr('interp.flags')}: ${Object.entries(run.flagCounts).map(([k, c]) => `${tr(`interp.flag.${k}`)} (${c})`).join(' · ')}` }] : []),
     ...(unc.length ? [{ type: 'p', text: tr('rep.tdsUncertainty') }, { type: 'list', items: unc }] : []),

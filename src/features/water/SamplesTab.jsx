@@ -60,7 +60,7 @@ export default function SamplesTab({ w }) {
 
       <h3>{t('wq.samples')}</h3>
       {w.samples.length === 0 ? <p className="muted">{t('wq.noSamples')}</p> : (
-        <div className="table-wrap">
+        <div className="table-wrap" tabIndex={0}>
           <table className="data compact">
             <thead><tr><th>{t('wq.sampleId')}</th><th>{t('wq.depth')} (m)</th><th className="num">TDS (mg/L)</th><th className="num">EC25 (µS/cm)</th><th>{t('wq.class')}</th><th>{t('wq.source')}</th><th /></tr></thead>
             <tbody>

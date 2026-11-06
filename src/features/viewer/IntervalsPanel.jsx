@@ -30,7 +30,7 @@ export default function IntervalsPanel({ wellPk, cursor }) {
     <div className="intervals">
       <h3>{t('viewer.formationsTitle')}</h3>
       {err && <div className="notice bad" role="alert">{err}</div>}
-      <div className="table-wrap">
+      <div className="table-wrap" tabIndex={0}>
         <table className="data compact">
           <thead><tr><th>{t('viewer.top')}</th><th>{t('viewer.bottom')}</th><th>{t('viewer.fname')}</th><th>{t('viewer.waterStatus')}</th><th /></tr></thead>
           <tbody>

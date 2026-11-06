@@ -37,7 +37,7 @@ export default function ExportPanel({ image, session, upd, imageSize, custom }) 
       <h3>{t('dig.reviewTitle')}</h3>
       {results.length === 0 && <p className="muted">{t('dig.nothingToExport')}</p>}
       {results.length > 0 && (
-        <div className="table-wrap">
+        <div className="table-wrap" tabIndex={0}>
           <table className="data compact">
             <thead><tr><th>{t('imp.curve')}</th><th className="num">{t('imp.points')}</th><th>{t('imp.depthRange')}</th><th>{t('dig.status')}</th></tr></thead>
             <tbody>
@@ -65,7 +65,7 @@ export default function ExportPanel({ image, session, upd, imageSize, custom }) 
             <ul className="small issues-inline">{view.result.issues.slice(0, 8).map((i, k) => (
               <li key={k}>⚠ {t(`dig.issue.${i.code}`).replace('{n}', i.n ?? '').replace('{value}', i.value != null ? fmt(i.value) : '')}</li>))}</ul>
           )}
-          <div className="table-wrap" style={{ maxHeight: 240, overflow: 'auto' }}>
+          <div className="table-wrap" tabIndex={0} style={{ maxHeight: 240, overflow: 'auto' }}>
             <table className="data compact">
               <thead><tr><th>{t('imp.depth')} (m)</th><th>{t('dig.value')}</th><th>{t('dig.method')}</th><th>x,y px</th></tr></thead>
               <tbody>

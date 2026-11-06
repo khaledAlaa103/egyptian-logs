@@ -124,7 +124,7 @@ export default function LogCanvas({ model, extent, view, onView, cursor, onCurso
   };
 
   return (
-    <div ref={wrapRef} className="logcanvas-wrap" tabIndex={0} onKeyDown={onKeyDown} aria-label={t('viewer.canvasLabel')} dir="ltr">
+    <div ref={wrapRef} className="logcanvas-wrap" tabIndex={0} onKeyDown={onKeyDown} role="group" aria-label={t('viewer.canvasLabel')} dir="ltr">
       <canvas ref={canvasRef} data-testid="log-canvas" style={{ width: '100%', height, touchAction: 'none', display: 'block' }}
         onPointerDown={onPointerDown} onPointerMove={onPointerMove} onPointerUp={onPointerUp}
         onPointerCancel={onPointerUp} onPointerLeave={() => !drag.current && setHover(null)} />

@@ -14,7 +14,7 @@ export default function StoredCurves({ wellPk, custom }) {
     <div className="card" style={{ marginTop: '1rem' }}>
       <h2>{t('imp.stored')}</h2>
       {list.length === 0 ? <p className="muted">{t('imp.storedEmpty')}</p> : (
-        <div className="table-wrap">
+        <div className="table-wrap" tabIndex={0}>
           <table className="data">
             <thead><tr><th>{t('imp.curve')}</th><th>{t('imp.source')}</th><th className="num">{t('imp.points')}</th>
               <th>{t('imp.depthRange')}</th><th>{t('imp.unitStored')}</th><th /></tr></thead>

@@ -47,12 +47,12 @@ export function detectHeaderRow(rows) {
 
 /** Extract a unit written in a header, e.g. "RD (ohm.m)" or "Depth [ft]". */
 export function unitFromHeader(h) {
-  const m = /[\(\[]\s*([^)\]]+?)\s*[\)\]]/.exec(String(h ?? ''));
+  const m = /[([]\s*([^)\]]+?)\s*[)\]]/.exec(String(h ?? ''));
   return m ? normalizeUnit(m[1]) : null;
 }
 
 export function isDepthHeader(h) {
-  const n = String(h ?? '').toLowerCase().replace(/[\(\[].*?[\)\]]/g, '').replace(/[^a-z؀-ۿ0-9]/g, '');
+  const n = String(h ?? '').toLowerCase().replace(/[([].*?[)\]]/g, '').replace(/[^a-z؀-ۿ0-9]/g, '');
   return DEPTH_ALIASES.includes(n);
 }
 

@@ -14,9 +14,13 @@ import enWq from './en.wq.js';
 import arWq from './ar.wq.js';
 import enRep from './en.rep.js';
 import arRep from './ar.rep.js';
+import enPwa from './en.pwa.js';
+import arPwa from './ar.pwa.js';
+import enDesk from './en.desk.js';
+import arDesk from './ar.desk.js';
 
 // Feature dictionaries are merged on top of the core ones (top-level keys must not collide).
-export const dictionaries = { en: { ...en, ...enImport, ...enViewer, ...enDig, ...enInterp, ...enRes, ...enWq, ...enRep }, ar: { ...ar, ...arImport, ...arViewer, ...arDig, ...arInterp, ...arRes, ...arWq, ...arRep } };
+export const dictionaries = { en: { ...en, ...enImport, ...enViewer, ...enDig, ...enInterp, ...enRes, ...enWq, ...enRep, ...enPwa, ...enDesk }, ar: { ...ar, ...arImport, ...arViewer, ...arDig, ...arInterp, ...arRes, ...arWq, ...arRep, ...arPwa, ...arDesk } };
 export const LANGS = { en: { dir: 'ltr' }, ar: { dir: 'rtl' } };
 
 /** Resolve a dotted key ("nav.wells") in a language; falls back to English, then the key. */

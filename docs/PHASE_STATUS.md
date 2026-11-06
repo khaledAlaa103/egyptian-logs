@@ -152,5 +152,49 @@ Known limits:
 - Page footers in the file PDF use Latin text/digits only (well ID and page numbers).
 - Original images are included as downscaled thumbnails (≤ 900 px, max 6).
 
+## Phase 10 — PWA and offline support ✅
+Done:
+- Installable PWA (vite-plugin-pwa / Workbox): web manifest (name, standalone display, relative `start_url`/`scope`, theme colours, 192/512 and maskable icons), generated icons (`npm run icons`, source `public/icons/icon.svg`), Apple touch icon, favicon.
+- Service worker precaches the whole app (19 files, ≈3.7 MB: app, CSS, icons, the PDF worker and the lazily loaded PDF/Excel libraries) and falls back to `index.html` for navigation (hash routes). Updates are never forced: a toast offers "Update now / Later". No external URLs anywhere (verified).
+- UI: offline badge in the top bar, "Install app" button when the browser offers installation (Android/Chrome), toasts for "ready to work offline" and "update available", Settings → "Offline use and installation" (connection, installed state, storage used/quota, request protection from clean-up, Android instructions). The app asks the browser for persistent storage so IndexedDB is not evicted.
+- Verification:
+  - `npm run verify:pwa` checks the build (manifest, icons, worker, every asset precached, no external resources); a vitest test runs it when `dist/` exists.
+  - `npm run e2e:offline` drives a real Chrome/Edge: installs the service worker, creates data, STOPS the server and goes offline, reloads and confirms the app starts, all 11 sections open, every precached file is available, existing data is intact and new data can be saved. Result: 13/13 checks passed.
+  - `npm run e2e:mobile` opens every section at 375 px in English and Arabic (touch emulation) and detects horizontal overflow. It found a real overflow in the viewer's curve rows (fixed); now clean. Chrome also offered "Install app" in that run, confirming installability.
+- Tests: 211 passing (offline badge, install prompt, update toast, storage helpers, build verification) plus the two browser scripts.
+
+Known limits:
+- The built-in preview pane of this development environment cannot run service workers, so offline behaviour was verified with real Chrome through puppeteer-core instead (not on a physical Android phone).
+- Installing on Android needs the app to be served once over HTTPS (or localhost) from any static host; afterwards it works without internet. Clearing the browser's site data deletes the local database: use Settings → Backup regularly.
+- On very narrow screens the log viewer shows the first tracks only (resize tracks or pan with two fingers); no automatic track scaling yet.
+
+## Phase 11 — Electron desktop app and Windows installer ✅
+Done (`electron/`, `src/desktop/`, `build/`, `docs/BUILD_AND_INSTALL.md`):
+- Electron 45 main process (`main.cjs`), sandboxed preload (`preload.cjs`) and testable helpers (`lib.cjs`). Same React app as the web/PWA version, loaded from a private `app://welllog` scheme (served from the asar, no `file://`).
+- Security: `contextIsolation: true`, `nodeIntegration: false`, `sandbox: true`, `webSecurity: true`; strict CSP (no `unsafe-eval`, no inline scripts, no remote origins); navigation, pop-ups and webviews blocked; all permissions denied; single-instance lock; DevTools only in development.
+- Local file access through six validated IPC channels (`app:info`, `file:save`, `file:open`, `pdf:print`, `backup:write`, `folder:reveal`); every handler checks the sender's URL; the page cannot choose a write path (native Save dialog or a fixed backups folder); only json/csv/xlsx/pdf/png/txt allowed; file names sanitised (path traversal neutralised); sizes limited.
+- App integration: every export (Excel, CSV, JSON, PDF, PNG) uses the native Save dialog in the desktop app; Reports → "Print / Save as PDF" writes a **vector PDF with selectable text** directly; Settings → Desktop application (data/backup folders, "Backup now to Documents", newest 20 kept); toast "Saved: path"; window size/position remembered; local database (IndexedDB) lives in the app profile; no service worker needed.
+- Windows installer (electron-builder, NSIS x64): choose install folder, **Desktop shortcut always created**, Start-menu shortcut, custom icon (`build/icon.ico`, multi-size), multi-language installer, data kept on uninstall. Built: `release/WellLog-Pro-Setup-0.1.0.exe` (122.7 MB, SHA-256 4CB813BF77D0CB595CE31A6B553352CD99665C1D9370FE93C6B91039E1A1F23F); app code in the asar is only 3.9 MB.
+- Tests: 224 unit/UI tests (13 new for the Electron helpers and configuration) and `npm run e2e:electron`: 24/24 checks in a real Electron window, both from source and from the **packaged** `WellLog Pro.exe`: no Node in the page, frozen allow-listed API, CSP enforced, window.open/navigation blocked, IPC rejects .exe and bad folders, local data survives reload, all 11 sections, Excel / image PDF / vector PDF saved, backup valid, zero network requests, second launch hands over to the first.
+
+Known limits:
+- The installer was built and its packaged app tested, but the installer itself was **not run** on this machine (it would create real shortcuts/registry entries). Please run it once to confirm the shortcut and the install flow.
+- Not code-signed: Windows SmartScreen may warn about an unknown publisher until you sign it with your certificate.
+- Windows x64 only; no auto-update (intentional: the app is offline-first).
+- The installer is 122 MB because it contains the Electron runtime.
+
+## Phase 12 — QA, scientific validation and release ✅ (v1.0.0)
+Done:
+- Scientific validation suite `tests/validation.test.js` (41 tests: Archie/Simandoux/Indonesia vs an independent solver, unit invariance, CSV round-trip fuzz). Real finding: Simandoux assumes n = 2 → result note `simandoux_n_ignored`.
+- ESLint flat config (clean); results-grid edit race fixed (double commit on Enter+blur); dashboard well overview; Alt+digit navigation and shortcuts table.
+- Accessibility: `npm run e2e:a11y` (axe, 11 sections × EN/AR × light/dark): **0 serious/critical**. Fixed contrast (dark-theme selects, report cover), focusable scroll regions, labels. Remaining: 1 moderate (heading order), 1 minor (empty action-column header).
+- `npm run e2e:smoke`: clicks every visible button on all sections in EN and AR (destructive ones skipped): no errors.
+- Docs: `VALIDATION.md` (what is and is not externally verified), `COMPLIANCE.md` (spec vs implementation, honest gaps), `TEST_CASES.md`, `USER_GUIDE.md` (AR/EN), `README.md`, `CHANGELOG.md`; synthetic samples in `samples/` (`scripts/make-samples.mjs`).
+- Version 1.0.0; installer rebuilt: `release/WellLog-Pro-Setup-1.0.0.exe` (122.7 MB, SHA-256 6BC476C9DD689224B47490F797D85D10ECC06896AC21977E906C0B4D0D03349A). Final run: 265/265 tests, ESLint 0 errors, verify:pwa OK, e2e:offline 13/13, e2e:mobile clean, e2e:electron 24/24 (source and packaged exe), e2e:a11y 0 serious/critical, e2e:smoke clean.
+
+Remaining / known limits:
+- Empirical constants (SP/Bateman–Konen, Arps, Winslow–Kister, NaCl fit, Vsh/porosity defaults) need review by a qualified petrophysicist/hydrogeologist.
+- Not tested on a physical Android phone; installer not run on this machine; not code-signed; Windows x64 only.
+
 ## Commands
 - `npm run dev` — dev server; `npm test` — tests; `npm run build` — production build

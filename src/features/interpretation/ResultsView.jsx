@@ -48,6 +48,7 @@ export default function ResultsView({ result }) {
 
   return (
     <div className="results">
+      {(result.notes || []).map((n) => <div key={n} className="notice bad small" role="status">{t(`interp.note.${n}`)}</div>)}
       <h3>{t('interp.diag')}</h3>
       <div className="diag-grid">
         {PARAMS.map((id) => {
@@ -75,7 +76,7 @@ export default function ResultsView({ result }) {
       </div>
 
       <h3>{t('interp.summaryTitle')}</h3>
-      <div className="table-wrap">
+      <div className="table-wrap" tabIndex={0}>
         <table className="data compact">
           <thead><tr><th>{t('imp.curve')}</th><th className="num">n</th><th className="num">{t('imp.min')}</th><th className="num">{t('imp.max')}</th><th className="num">{t('interp.mean')}</th></tr></thead>
           <tbody>
@@ -104,7 +105,7 @@ export default function ResultsView({ result }) {
       })}
 
       <h3>{t('interp.tableTitle')}</h3>
-      <div className="table-wrap">
+      <div className="table-wrap" tabIndex={0}>
         <table className="data compact">
           <thead><tr><th>{t('imp.depth')} (m)</th>{['temp', 'ra', 'rt', 'vsh', 'phi', 'rw', 'sw'].map((s) => <th key={s} className="num">{t(`interp.series.${s}`)}</th>)}<th>{t('interp.flags')}</th></tr></thead>
           <tbody>

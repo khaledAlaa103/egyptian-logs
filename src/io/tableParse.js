@@ -7,7 +7,7 @@ const CANDIDATES = [',', ';', '\t', '|'];
 export function parseDelimited(text, delimiter) {
   const rows = [];
   let row = [], cell = '', inQ = false;
-  const src = text.replace(/^﻿/, '');
+  const src = text.replace(/^\uFEFF/, '');
   for (let i = 0; i < src.length; i++) {
     const c = src[i];
     if (inQ) {
@@ -30,7 +30,7 @@ export function parseDelimited(text, delimiter) {
  * column count (>1) across the first lines, outside quotes. Returns { delimiter, confident }.
  */
 export function detectDelimiter(text) {
-  const sample = text.replace(/^﻿/, '').split(/\r\n|\n|\r/).filter((l) => l.trim() !== '').slice(0, 30);
+  const sample = text.replace(/^\uFEFF/, '').split(/\r\n|\n|\r/).filter((l) => l.trim() !== '').slice(0, 30);
   let best = { delimiter: ',', score: -1, cols: 1 };
   for (const d of CANDIDATES) {
     const counts = parseDelimited(sample.join('\n'), d).map((r) => r.length);

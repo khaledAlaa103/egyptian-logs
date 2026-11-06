@@ -71,7 +71,7 @@ export default function ResultsPage() {
       });
     }
     return r;
-  }, [rows, view]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [rows, view]);  
 
   // ---- labels ----
   const label = useCallback((id) => {
@@ -265,7 +265,7 @@ export default function ResultsPage() {
 
 function TracePanel({ cell, col, rowId, t, lang, traceText, runMethods, formation }) {
   const [src, setSrc] = useState(formation?.overrides?.[col]?.source || '');
-  useEffect(() => { setSrc(formation?.overrides?.[col]?.source || ''); }, [rowId, col]); // eslint-disable-line react-hooks/exhaustive-deps
+  useEffect(() => { setSrc(formation?.overrides?.[col]?.source || ''); }, [rowId, col]);  
   const tr = cell.trace;
   return (
     <div className="small">

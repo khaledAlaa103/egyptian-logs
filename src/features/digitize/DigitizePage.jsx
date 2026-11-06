@@ -54,7 +54,7 @@ export default function DigitizePage({ well, custom }) {
     setBusy(false);
   }, [t]);
 
-  useEffect(() => () => orig && URL.revokeObjectURL(orig.url), []); // eslint-disable-line react-hooks/exhaustive-deps
+  useEffect(() => () => orig && URL.revokeObjectURL(orig.url), []);  
   useEffect(() => { setImage(null); setOrig(null); setSession(null); setStep('image'); }, [well.id]);
 
   // ---- autosave session ----
@@ -84,7 +84,7 @@ export default function DigitizePage({ well, custom }) {
       drawWorking(wk.getContext('2d'), orig.img, W, H, p);
       return { rotated: rot, working: wk };
     } catch { return { error: 'canvas' }; }
-  }, [orig, image, session?.processing]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [orig, image, session?.processing]);  
 
   // ---- upload ----
   const onFile = async (e) => {

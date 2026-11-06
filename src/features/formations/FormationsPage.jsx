@@ -101,7 +101,7 @@ export default function FormationsPage() {
             <div className="card">
               <h3>{t('fa.intervals')}</h3>
               {rows.length === 0 ? <p className="muted">{t('viewer.noFormations')}</p> : (
-                <div className="table-wrap">
+                <div className="table-wrap" tabIndex={0}>
                   <table className="data compact">
                     <thead><tr><th /><th>#</th><th>{t('res.col.name')}</th><th>{t('res.col.top')}–{t('res.col.bottom')} (m)</th><th>{t('res.col.waterBearing')}</th></tr></thead>
                     <tbody>
@@ -126,7 +126,7 @@ export default function FormationsPage() {
                 <>
                   <p className="small" dir="ltr">{f4(current.formation.top)} – {f4(current.formation.bottom)} m · {t('res.col.thickness')} {f4(current.cells.thickness.v)} m</p>
                   <p className="small">{t('res.col.lithology')}: <strong>{current.cells.lithology.v || '—'}</strong> · {t('res.col.aquiferClass')}: <strong>{t(`res.opt.aquiferClass.${current.cells.aquiferClass.v}`)}</strong> · {t('res.col.confidence')}: <strong>{current.cells.confidence.v ? t(`res.opt.confidence.${current.cells.confidence.v}`) : '—'}</strong></p>
-                  <div className="table-wrap">
+                  <div className="table-wrap" tabIndex={0}>
                     <table className="data compact">
                       <thead><tr><th>{t('imp.curve')}</th><th className="num">{t('interp.mean')}</th><th className="num">{t('imp.min')}</th><th className="num">{t('imp.max')}</th><th className="num">n</th><th>{t('res.statusCol')}</th></tr></thead>
                       <tbody>
@@ -150,7 +150,7 @@ export default function FormationsPage() {
           {cmpRows.length >= 2 && (
             <div className="card">
               <h3>{t('fa.comparison')}</h3>
-              <div className="table-wrap">
+              <div className="table-wrap" tabIndex={0}>
                 <table className="data compact">
                   <thead><tr><th>{t('imp.curve')}</th>{cmpRows.map((r) => <th key={r.id} className="num">#{r.cells.number.v} {r.cells.name.v}</th>)}</tr></thead>
                   <tbody>
@@ -174,7 +174,7 @@ export default function FormationsPage() {
             </div>
             {rows.length > 0 && (
               <>
-                <div className="table-wrap">
+                <div className="table-wrap" tabIndex={0}>
                   <table className="data compact">
                     <thead><tr><th>#</th><th>{t('res.col.name')}</th><th className="num">Vsh</th><th className="num">φ</th><th className="num">Sw</th><th>{t('fa.suggested')}</th><th>{t('res.col.confidence')}</th><th>{t('fa.criteria')}</th></tr></thead>
                     <tbody>

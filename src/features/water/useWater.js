@@ -33,7 +33,7 @@ export default function useWater(wellPk) {
 
   const { normalization, normOk, pairs, calibration } = useMemo(
     () => resolveCalibration({ settings, samples, projectSamples }), [settings, samples, projectSamples]);
-  const direct = useMemo(() => samples.map((s) => ({ s, r: fromSample(s, normalization) })), [samples, normalization]); // eslint-disable-line react-hooks/exhaustive-deps
+  const direct = useMemo(() => samples.map((s) => ({ s, r: fromSample(s, normalization) })), [samples, normalization]);  
 
   return { ...data, settings, setSettings, samples, direct, pairs, normalization, normOk, calibration };
 }

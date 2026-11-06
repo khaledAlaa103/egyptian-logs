@@ -4,6 +4,8 @@ import { usePrefs } from './PrefsContext.jsx';
 import { NAV_ITEMS } from './navigation.js';
 import Icon from '../design/Icon.jsx';
 import PrefsControls from './PrefsControls.jsx';
+import { ConnectionBadge, PwaToasts } from '../pwa/PwaUi.jsx';
+import { DesktopToasts } from '../desktop/DesktopUi.jsx';
 
 export default function Shell() {
   const { t, sidebarCollapsed, toggleSidebar } = usePrefs();
@@ -62,10 +64,13 @@ export default function Shell() {
             <Icon name="menu" />
           </button>
           <div className="topbar-title">{t('app.tagline')}</div>
+          <ConnectionBadge />
           <PrefsControls />
         </header>
         <main className="content"><Outlet /></main>
       </div>
+      <PwaToasts />
+      <DesktopToasts />
       <nav className="bottom-nav" aria-label={t('nav.menu')}>
         {NAV_ITEMS.filter((n) => ['dashboard', 'wells', 'import', 'viewer', 'reports'].includes(n.id)).map((n) => (
           <NavLink key={n.id} to={n.path} end={n.path === '/'}

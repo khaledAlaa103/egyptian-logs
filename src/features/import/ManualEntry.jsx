@@ -88,7 +88,7 @@ export default function ManualEntry({ well, custom }) {
       points.push({ depth: toCanonical(dn, 'depth', depthUnit), value: def.group ? toCanonical(n, def.group, c.unit) : n, row: i + 1 });
     });
     return { curveId: c.id, unit: canonicalUnitOf(def), enteredUnit: c.unit, points };
-  }), [curves, rows, depthUnit, custom]); // eslint-disable-line react-hooks/exhaustive-deps
+  }), [curves, rows, depthUnit, custom]);  
 
   // Autosave (debounced). Only valid cells are persisted; invalid cells stay highlighted.
   useEffect(() => {
@@ -104,7 +104,7 @@ export default function ManualEntry({ well, custom }) {
       setStatus('saved');
     }, 700);
     return () => clearTimeout(h);
-  }, [rows, curves, depthUnit, well]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [rows, curves, depthUnit, well]);  
 
   const touch = () => { dirty.current = true; };
   const setCell = (i, key, val) => {
@@ -195,7 +195,7 @@ export default function ManualEntry({ well, custom }) {
       </div>
       <p className="muted small">{t('imp.manualHint')}</p>
 
-      <div className="table-wrap grid-wrap">
+      <div className="table-wrap grid-wrap" tabIndex={0}>
         <table className="data grid">
           <thead>
             <tr>

@@ -3,3 +3,5 @@ dist
 *.log
 .vite
 release
+e2e-shots
+release

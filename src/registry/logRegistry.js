@@ -163,7 +163,7 @@ export function validateCurveValue(def, v) {
 
 /** Header normalisation for auto-mapping (lowercase, strip units/brackets/non-alphanumerics). */
 export const normalizeHeader = (h) =>
-  String(h ?? '').toLowerCase().replace(/[\(\[].*?[\)\]]/g, '').replace(/[^a-z0-9]/g, '');
+  String(h ?? '').toLowerCase().replace(/[([].*?[)\]]/g, '').replace(/[^a-z0-9]/g, '');
 
 export function guessCurve(header, custom = []) {
   const n = normalizeHeader(header);

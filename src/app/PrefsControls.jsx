@@ -7,7 +7,7 @@ export default function PrefsControls() {
   return (
     <div className="prefs-controls">
       <button type="button" className="chip" onClick={() => setLang(lang === 'ar' ? 'en' : 'ar')}
-        aria-label={t('common.language')}>
+        aria-label={`${lang === 'ar' ? 'EN' : 'ع'} – ${t('common.language')}`}>
         {lang === 'ar' ? 'EN' : 'ع'}
       </button>
       <button type="button" className="icon-btn" aria-label={t('common.toggleTheme')}

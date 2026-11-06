@@ -1,15 +1,27 @@
 {
   "name": "welllog-pro",
   "private": true,
-  "version": "0.1.0",
-  "description": "WellLog Pro - Professional Well Logging Interpretation & Groundwater Analysis System",
+  "version": "1.0.0",
+  "description": "WellLog Pro - Well Logging Interpretation and Groundwater Analysis (offline desktop, web and Android)",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "icons": "node scripts/make-icons.mjs",
+    "verify:pwa": "node scripts/verify-pwa.mjs",
+    "e2e:offline": "node scripts/e2e-offline.mjs",
+    "e2e:mobile": "node scripts/e2e-mobile.mjs",
+    "electron:start": "npm run build && electron .",
+    "electron:dir": "npm run build && electron-builder --win --dir",
+    "electron:pack": "npm run build && electron-builder --win nsis",
+    "e2e:electron": "node scripts/e2e-electron.mjs",
+    "lint": "eslint .",
+    "test:coverage": "vitest run --coverage",
+    "e2e:a11y": "node scripts/e2e-a11y.mjs",
+    "e2e:smoke": "node scripts/e2e-smoke.mjs"
   },
   "dependencies": {
     "dexie": "^4.4.7",
@@ -23,13 +35,71 @@
     "xlsx": "https://cdn.sheetjs.com/xlsx-0.20.3/xlsx-0.20.3.tgz"
   },
   "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@testing-library/dom": "^10.4.2",
     "@testing-library/jest-dom": "^7.0.1",
     "@testing-library/react": "^16.3.3",
     "@testing-library/user-event": "^14.6.8",
     "@vitejs/plugin-react": "^6.2.1",
+    "@vitest/coverage-v8": "^5.1.0",
+    "axe-core": "^4.14.0",
+    "electron": "^45.2.3",
+    "electron-builder": "^26.18.0",
+    "eslint": "^10.14.0",
+    "eslint-plugin-react": "^7.37.5",
+    "eslint-plugin-react-hooks": "^7.1.1",
     "fake-indexeddb": "^6.2.7",
+    "globals": "^17.14.0",
     "jsdom": "^31.0.0",
+    "png-to-ico": "^3.0.2",
+    "puppeteer-core": "^25.16.0",
+    "sharp": "^0.35.5",
     "vite": "^8.3.6",
+    "vite-plugin-pwa": "^2.0.0",
     "vitest": "^5.1.0"
+  },
+  "main": "electron/main.cjs",
+  "author": "WellLog Pro",
+  "build": {
+    "appId": "com.welllogpro.app",
+    "productName": "WellLog Pro",
+    "copyright": "WellLog Pro",
+    "directories": {
+      "output": "release",
+      "buildResources": "build"
+    },
+    "files": [
+      "dist/**/*",
+      "electron/**/*",
+      "package.json",
+      "!node_modules"
+    ],
+    "asar": true,
+    "artifactName": "WellLog-Pro-Setup-${version}.exe",
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "icon": "build/icon.ico"
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": "always",
+      "createStartMenuShortcut": true,
+      "shortcutName": "WellLog Pro",
+      "deleteAppDataOnUninstall": false,
+      "installerIcon": "build/icon.ico",
+      "uninstallerIcon": "build/icon.ico",
+      "installerHeaderIcon": "build/icon.ico",
+      "multiLanguageInstaller": true,
+      "language": "1033"
+    }
   }
 }

@@ -22,7 +22,7 @@ export default function ResultsGrid({
   useEffect(() => { // keep the active cell inside the table when data/columns change
     setActive((a) => ({ r: Math.min(a.r, Math.max(0, rows.length - 1)), c: Math.min(a.c, Math.max(0, cols.length - 1)) }));
   }, [rows.length, cols.length]);
-  useEffect(() => { const row = rows[active.r]; if (row && cols[active.c]) onActive?.(row.id, cols[active.c]); }, [active.r, active.c, rows, cols]); // eslint-disable-line react-hooks/exhaustive-deps
+  useEffect(() => { const row = rows[active.r]; if (row && cols[active.c]) onActive?.(row.id, cols[active.c]); }, [active.r, active.c, rows, cols]);  
 
   const editable = (r, c) => rows[r] && cols[c] && canEdit(cols[c]);
   const textOf = (r, c) => { const col = cols[c]; const cell = rows[r].cells[col]; return formatCell(col, cell.v, units[COL[col].group]); };
@@ -91,8 +91,8 @@ export default function ResultsGrid({
   const allSel = rows.length > 0 && rows.every((r) => selected.has(r.id));
 
   return (
-    <div className="grid-box" ref={box} tabIndex={0} onKeyDown={onKeyDown} onCopy={onCopy} onPaste={onPasteEvt} role="grid" aria-label={label('title')}>
-      <table className="sheet">
+    <div className="grid-box" ref={box} tabIndex={0} onKeyDown={onKeyDown} onCopy={onCopy} onPaste={onPasteEvt}>
+      <table className="sheet" role="grid" aria-label={label('title')}>
         <thead>
           <tr>
             <th className="rowsel"><input type="checkbox" checked={allSel} aria-label={label('selectAll')} onChange={(e) => onSelect(e.target.checked ? new Set(rows.map((r) => r.id)) : new Set())} /></th>
