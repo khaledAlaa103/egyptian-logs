@@ -79,5 +79,24 @@ Known limits:
 - Pointer-event simulation was used for the browser check (not a human mouse session); pdf.js paint needs animation frames, so rendering pauses while the window is hidden.
 - Stale `vite` dev servers keep older ports (5173–5177); start a fresh one after installing dependencies.
 
+## Phase 6 — Scientific interpretation engine ✅
+Done (`src/engine/`, pure JS, no UI imports):
+- Temperature: Arps correction (°C/°F), conductivity normalisation (alpha must be supplied; no hidden default), temperature profile (constant / gradient / measured curve).
+- Rt: apparent resistivity is never silently used as Rt. Routes: none (no Rt), direct (only when thick bed + negligible invasion + negligible borehole effect are all asserted → status "estimated"), geometric factor (Rt = (Ra − J·Rxo)/(1 − J)), chart factor (K and its cited source required).
+- Rw: known value (source note required, Arps to depth temperature), SP method (K = 65 + 0.24·T, Rmfe rule with chart-needed refusal, Bateman–Konen fit), minimum Rwa in a user-chosen clean wet zone.
+- Petrophysics: GR index, Vshale (linear, Larionov ×2, Clavier, Steiber, SP), density / Wyllie / Raymer-Hunt-Gardner / neutron / neutron–density porosity (gas crossover flag), effective porosity, formation factor, resistivity index; Sw by Archie (blocked in clay-rich zones: Vsh must exist and be ≤ the user's clean limit), Simandoux (n=2) and Indonesia. Round-trip tests confirm each shaly solution satisfies its own equation.
+- Every method is documented bilingually (equation, source, assumptions, uncertainty, validity) in `methodsInfo.js`, shown in the UI and stored with each run for the report.
+- Orchestrator: runs over the depth grid of a chosen curve (interpolation never bridges data gaps); a quantity with a missing input is left empty and the exact reason is reported with counts ("what could be calculated").
+- UI: Interpretation page with all parameter sections (nothing pre-filled; presets only fill when pressed; "suggest GR baselines" is an explicit action), live results, profiles, summary, method table, per-depth table with flags, save/delete runs (inputs stored with outputs), config autosaved per well.
+- Tests: 135 passing (37 engine tests with hand-computed values + UI tests). Build OK. Visual check in the browser with a synthetic well.
+
+Fixed during testing: i18n option-group keys collided with label keys (form crash); missing Rt curve now reports "no resistivity curve selected".
+
+Known limits / verify before relying on results:
+- Tool-specific environmental/borehole correction charts are not built in: you supply J or K from your chart (with source). 
+- The SP → Rw fit (Bateman–Konen) and K = 65 + 0.24 T are published empirical relations; confirm the constants against the chartbook your organisation uses. Cases below Rwe(75 °F) = 0.12 Ω·m need a chart and are refused.
+- Water quality / TDS conversion is Phase 8; results are stored in `interpretations` and feed the results tables in Phase 7.
+- Desktop view: `start-app.bat` builds the app and opens it at http://localhost:4173 (Electron installer is Phase 11).
+
 ## Commands
 - `npm run dev` — dev server; `npm test` — tests; `npm run build` — production build

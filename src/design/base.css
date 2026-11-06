@@ -194,3 +194,27 @@ table.compact input, table.compact select { width: 100%; min-height: 28px; paddi
 .issues-inline { margin: 0; padding-inline-start: 1.1rem; color: #b45309; }
 tr.sel { background: var(--surface-2); }
 @media (max-width: 1100px) { .dig-grid { grid-template-columns: 1fr; } .dig-side { max-height: none; } }
+
+/* ---- Phase 6: interpretation ---- */
+.interp-grid { display: grid; grid-template-columns: minmax(0, 420px) minmax(0, 1fr); gap: 1rem; align-items: start; }
+.isection { border: 1px solid var(--border); border-radius: 8px; padding: .4rem .7rem; margin-bottom: .6rem; }
+.isection > summary { cursor: pointer; font-weight: 600; padding: .3rem 0; }
+.igrid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .5rem .7rem; padding: .3rem 0 .5rem; align-items: start; }
+.ifield { display: grid; gap: .2rem; font-size: .85rem; font-weight: 600; }
+.ifield em { font-weight: 400; color: var(--text-muted); font-style: normal; }
+.ifield input, .ifield select { padding: .35rem .5rem; min-height: 34px; width: 100%; }
+.ifield.wide, .igrid .wide { grid-column: 1 / -1; }
+.icheck { display: flex; gap: .4rem; align-items: center; font-size: .85rem; margin: .2rem 0; }
+.presets { display: flex; gap: .3rem; flex-wrap: wrap; align-items: center; }
+.diag-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: .5rem; }
+.diag { border: 1px solid var(--border); border-radius: 8px; padding: .4rem .6rem; display: grid; gap: .1rem; }
+.diag.good { border-color: var(--teal-600); background: rgba(20,184,166,.08); }
+.diag.part { border-color: #d97706; background: rgba(217,119,6,.08); }
+.diag.none { border-color: #dc2626; background: rgba(220,38,38,.07); }
+.diag ul { margin: .2rem 0 0; padding-inline-start: 1rem; }
+.strips { display: grid; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); gap: .5rem; }
+.strip svg { background: var(--surface); border-radius: 6px; color: var(--text); }
+.method { border-bottom: 1px solid var(--border); padding: .3rem 0; }
+.eq { font-family: var(--font-mono); font-size: .85rem; background: var(--surface-2); padding: .4rem .6rem; border-radius: 6px; overflow-x: auto; }
+.results h3 { margin: 1rem 0 .4rem; }
+@media (max-width: 1100px) { .interp-grid { grid-template-columns: 1fr; } }

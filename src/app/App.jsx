@@ -7,6 +7,7 @@ import Projects from '../features/projects/Projects.jsx';
 import Wells from '../features/wells/Wells.jsx';
 import ImportPage from '../features/import/ImportPage.jsx';
 import ViewerPage from '../features/viewer/ViewerPage.jsx';
+import InterpretationPage from '../features/interpretation/InterpretationPage.jsx';
 import ModulePlaceholder from '../features/ModulePlaceholder.jsx';
 
 export default function App() {
@@ -19,7 +20,8 @@ export default function App() {
         <Route path="/wells" element={<Wells />} />
         <Route path="/import" element={<ImportPage />} />
         <Route path="/viewer" element={<ViewerPage />} />
-        {NAV_ITEMS.filter((n) => !['dashboard', 'settings', 'projects', 'wells', 'import', 'viewer'].includes(n.id)).map((n) => (
+        <Route path="/interpretation" element={<InterpretationPage />} />
+        {NAV_ITEMS.filter((n) => !['dashboard', 'settings', 'projects', 'wells', 'import', 'viewer', 'interpretation'].includes(n.id)).map((n) => (
           <Route key={n.id} path={n.path} element={<ModulePlaceholder item={n} />} />
         ))}
         <Route path="*" element={<Navigate to="/" replace />} />

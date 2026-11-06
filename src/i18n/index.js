@@ -6,9 +6,11 @@ import enViewer from './en.viewer.js';
 import arViewer from './ar.viewer.js';
 import enDig from './en.dig.js';
 import arDig from './ar.dig.js';
+import enInterp from './en.interp.js';
+import arInterp from './ar.interp.js';
 
 // Feature dictionaries are merged on top of the core ones (top-level keys must not collide).
-export const dictionaries = { en: { ...en, ...enImport, ...enViewer, ...enDig }, ar: { ...ar, ...arImport, ...arViewer, ...arDig } };
+export const dictionaries = { en: { ...en, ...enImport, ...enViewer, ...enDig, ...enInterp }, ar: { ...ar, ...arImport, ...arViewer, ...arDig, ...arInterp } };
 export const LANGS = { en: { dir: 'ltr' }, ar: { dir: 'rtl' } };
 
 /** Resolve a dotted key ("nav.wells") in a language; falls back to English, then the key. */
