@@ -8,6 +8,7 @@ import ManualEntry from './ManualEntry.jsx';
 import TableImportWizard from './TableImportWizard.jsx';
 import CustomCurveModal from './CustomCurveModal.jsx';
 import StoredCurves from './StoredCurves.jsx';
+import DigitizePage from '../digitize/DigitizePage.jsx';
 
 const TABS = ['manual', 'excel', 'csv', 'image'];
 
@@ -41,9 +42,7 @@ export default function ImportPage() {
           wellPk && well ? <TableImportWizard key={`${tab}-${wellPk}`} kind={tab} well={well} custom={custom} />
             : <p className="muted">{t('imp.selectWellFirst')}</p>
         )}
-        {tab === 'image' && (
-          <div className="empty"><span className="badge">{t('common.phase')} 5</span><p>{t('imp.imageLater')}</p></div>
-        )}
+        {tab === 'image' && (wellPk && well ? <DigitizePage key={wellPk} well={well} custom={custom} /> : <p className="muted">{t('imp.selectWellFirst')}</p>)}
       </div>
 
       {well && <StoredCurves wellPk={well.id} custom={custom} />}

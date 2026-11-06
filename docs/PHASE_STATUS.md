@@ -60,5 +60,24 @@ Known limits:
 - Spectral/NMR curves use automatic display ranges; the neutron/sonic default scales are reversed by convention.
 - Dev servers: after editing the schema, an old `vite` instance serves stale modules; start a fresh one.
 
+## Phase 5 — Image/PDF import, calibration, digitisation ✅
+Done:
+- Upload JPG/PNG/PDF (type, size, empty-file checks). The ORIGINAL file is stored unchanged (`logImages`); PDF pages are rendered with pdf.js bundled locally (worker included, works offline) and a page can be re-selected.
+- Crop and rotate (90° steps + fine rotation, crop rectangle). Every point maps back to the original image pixel (`workingToOriginal`, round-trip tested). Changing rotation/crop clears calibration after confirmation.
+- Depth calibration: ≥2 reference lines with typed depths (m or ft), least-squares fit for more points, resolution (m/px) and residual shown, warnings for decreasing depth/large residual, refusal when unusable. "Detect gridlines" finds line positions (no OCR: depth values are always typed) and new points snap to them.
+- Horizontal calibration per track: own quantity/unit, linear or logarithmic scale, ≥2 reference values, reversed scales supported, per-track status and resolution.
+- Digitisation: manual point add/drag/delete (Delete key), pan/zoom (wheel, pinch), per-curve colour; optional automatic extraction by colour tracing with tolerance, search region and row step. Gaps are never interpolated; unreliable results (low coverage, many jumps, ambiguity) are flagged with advice to digitise manually. Auto points that are edited become "auto (edited)".
+- Review & export: depth/value preview, quality (resolution, residual), issues (out of range, duplicates, extrapolation). Optional regular resampling (recorded in metadata). Export writes `digitizedCurves` (each point: working px, original px, depth, value, method, flags + calibration snapshot) and pushes the curve to the workspace as source `image` with provenance. Sessions autosave and reopen.
+- Tests: 95 passing (calibration, transform round-trip, extraction on synthetic images, gridline detection, pipeline with unit conversion/log scale, storage/export, UI entry). Build OK.
+- Real-browser end-to-end check with a synthetic image whose true curve is known (GR 75 + 50 sin(depth/10)): upload → gridline snap → calibration → colour pick → auto extraction → export: max error 0.24 gAPI (pixel resolution 0.5 gAPI/px); session reopened after reload. A hand-built PDF rendered to a 1080×1350 PNG.
+
+Fixed during verification: 0.5 px bias between detected and clicked positions (now continuous coordinates), coverage penalised empty margins, step-tab CSS class collision, radio inputs styled as text boxes.
+
+Known limits:
+- No OCR: depth/value labels must be typed. Auto extraction is colour-based and needs a distinct curve colour; black curves overlapping black gridlines will be unreliable (use manual digitisation).
+- Vertical depth scale is assumed linear (typical for logs); skew is corrected by rotation, not by perspective warp.
+- Pointer-event simulation was used for the browser check (not a human mouse session); pdf.js paint needs animation frames, so rendering pauses while the window is hidden.
+- Stale `vite` dev servers keep older ports (5173–5177); start a fresh one after installing dependencies.
+
 ## Commands
 - `npm run dev` — dev server; `npm test` — tests; `npm run build` — production build
