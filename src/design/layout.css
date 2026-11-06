@@ -1,0 +1,83 @@
+.shell { display: flex; min-height: 100%; }
+
+.sidebar {
+  width: var(--sidebar-w); background: var(--sidebar-bg); color: var(--sidebar-text);
+  display: flex; flex-direction: column; flex: none; position: sticky; top: 0;
+  height: 100vh; transition: width .18s ease; overflow: hidden;
+}
+.is-collapsed .sidebar { width: var(--sidebar-w-collapsed); }
+.is-collapsed .nav-label, .is-collapsed .brand-text { display: none; }
+
+.brand { display: flex; align-items: center; gap: .7rem; padding: 1rem; height: var(--topbar-h); }
+.brand-mark {
+  width: 36px; height: 36px; border-radius: 9px; flex: none; display: grid; place-items: center;
+  background: linear-gradient(135deg, var(--teal-500), var(--cyan-400)); color: var(--navy-900);
+  font-weight: 800; letter-spacing: .5px;
+}
+.brand-text { font-weight: 700; color: #fff; white-space: nowrap; }
+
+.sidebar nav { flex: 1; overflow-y: auto; padding: .4rem .6rem; }
+.sidebar ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 2px; }
+.nav-link, .collapse-btn {
+  display: flex; align-items: center; gap: .75rem; padding: .6rem .75rem; border-radius: 8px;
+  color: inherit; text-decoration: none; white-space: nowrap; background: none; border: 0; width: 100%;
+}
+.nav-link:hover, .collapse-btn:hover { background: rgba(255, 255, 255, .06); }
+.nav-link.active { background: var(--sidebar-active); color: var(--cyan-400); font-weight: 600; }
+.collapse-btn { margin: .5rem .6rem; width: calc(100% - 1.2rem); }
+.is-collapsed .nav-link, .is-collapsed .collapse-btn { justify-content: center; }
+.is-collapsed .collapse-btn .icon { transform: scaleX(-1); }
+[dir="rtl"] .is-collapsed .collapse-btn .icon { transform: none; }
+
+.main { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+.topbar {
+  height: var(--topbar-h); display: flex; align-items: center; gap: .75rem; padding: 0 1rem;
+  background: var(--surface); border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 5;
+}
+.topbar-title { flex: 1; color: var(--text-muted); font-size: .9rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.prefs-controls { display: flex; gap: .4rem; }
+.menu-btn { display: none; }
+.content { padding: 1.25rem; flex: 1; }
+.page { max-width: 1400px; margin: 0 auto; }
+
+.stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: .9rem; margin: 1rem 0; }
+.stat-value { font-size: 2rem; font-weight: 700; color: var(--accent); line-height: 1.1; }
+.stat-label { color: var(--text-muted); font-size: .85rem; }
+.two-col { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1rem; }
+.steps { margin: 0; padding-inline-start: 1.3rem; display: grid; gap: .4rem; }
+
+.bottom-nav { display: none; }
+.scrim { display: none; }
+
+/* Tablet / mobile */
+@media (max-width: 800px) {
+  .menu-btn { display: inline-flex; }
+  .sidebar {
+    position: fixed; inset-block: 0; inset-inline-start: 0; z-index: 20; width: min(280px, 82vw);
+    transform: translateX(-105%); transition: transform .2s ease;
+  }
+  [dir="rtl"] .sidebar { transform: translateX(105%); }
+  .is-mobile-open .sidebar { transform: none; }
+  .is-collapsed .sidebar { width: min(280px, 82vw); }
+  .is-collapsed .nav-label, .is-collapsed .brand-text { display: inline; }
+  .collapse-btn { display: none; }
+  .scrim { display: block; position: fixed; inset: 0; background: rgba(0, 0, 0, .5); z-index: 15; }
+  .content { padding: 1rem 1rem 5.5rem; }
+  .topbar-title { display: none; }
+  .prefs-controls { margin-inline-start: auto; }
+  .bottom-nav {
+    display: flex; position: fixed; inset-inline: 0; bottom: 0; z-index: 10;
+    background: var(--surface); border-top: 1px solid var(--border);
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+  .bn-link {
+    flex: 1; display: grid; justify-items: center; gap: 2px; padding: .45rem .2rem;
+    color: var(--text-muted); text-decoration: none; font-size: .68rem; min-height: 52px;
+  }
+  .bn-link.active { color: var(--accent); font-weight: 600; }
+}
+
+@media print {
+  .sidebar, .topbar, .bottom-nav { display: none; }
+  .content { padding: 0; }
+}
