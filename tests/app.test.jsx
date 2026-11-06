@@ -7,6 +7,7 @@ import { PrefsProvider } from '../src/app/PrefsContext.jsx';
 import { NAV_ITEMS } from '../src/app/navigation.js';
 import en from '../src/i18n/en.js';
 import ar from '../src/i18n/ar.js';
+import { dictionaries } from '../src/i18n/index.js';
 
 const setup = (path = '/') =>
   render(
@@ -19,7 +20,7 @@ describe('i18n dictionaries', () => {
   const flat = (o, p = '') => Object.entries(o).flatMap(([k, v]) =>
     v && typeof v === 'object' && !Array.isArray(v) ? flat(v, p + k + '.') : [p + k]);
   it('Arabic has exactly the same keys as English', () => {
-    expect(flat(ar).sort()).toEqual(flat(en).sort());
+    expect(flat(dictionaries.ar).sort()).toEqual(flat(dictionaries.en).sort());
   });
 });
 

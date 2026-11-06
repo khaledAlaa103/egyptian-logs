@@ -28,5 +28,22 @@ Known limits:
 - Autosave applies to manual data entry (Phase 3); project/well forms save on "Save".
 - Archived projects' wells are not auto-archived.
 
+## Phase 3 — Log registry, manual entry, Excel & CSV import ✅
+Done:
+- Log registry (`src/registry/logRegistry.js`): 32 numeric logs + Image Logs (non-numeric, Phase 5) in 5 categories; each has name/abbr/description (en+ar), unit group, scale type, plausible range, interpretation roles, limitations (apparent resistivity ≠ Rt, etc.), header aliases. User-defined custom curves (stored in `preferences`).
+- Unit engine (`src/engine/units/units.js`): depth, resistivity, conductivity, SP, density, porosity, sonic, caliper/diameter, temperature. Everything is stored in canonical units (depth always m); the entered unit is kept for traceability.
+- Importers: quote-aware CSV with delimiter auto-detection (`, ; tab |`), decimal comma/point, XLSX/XLS via SheetJS 0.20.3 (sheet selection), header-row detection, column auto-mapping, null markers (-999.25 etc., editable).
+- Validation before save: depth invalid/negative/duplicate/unsorted/beyond total depth, non-numeric values, log-scale ≤ 0, out-of-range values; row numbers shown; invalid points excluded; **units are never assumed** (a column without a unit blocks the import until the user picks one).
+- Each saved curve keeps source (manual/excel/csv), file name, sheet, delimiter, header, entered unit and the source row of every point.
+- Manual entry grid: multiple curves, per-column unit, depth unit, cell validation, Excel paste, debounced autosave (only valid cells are saved).
+- Samples in `samples/` (synthetic, labelled; not real data). Tests: 57 passing. Build OK.
+
+Known limits:
+- Manual grid edits only curves whose source is `manual`; imported curves are locked there (edit tools come with the viewer/results grid).
+- Spectral channels K/U/Th share one unit per tool; NMR T2 distributions are not imported.
+- Excel upload is covered by engine tests, not by a UI test (jsdom `File.arrayBuffer`).
+- Bundle is >500 kB because of SheetJS (acceptable offline; may be code-split later).
+- Stop stale `vite` dev servers (ports 5173–5175) before starting a new one; after installing a dependency the old server serves a broken page.
+
 ## Commands
 - `npm run dev` — dev server; `npm test` — tests; `npm run build` — production build
