@@ -23,4 +23,13 @@ export function readFileText(file) {
   });
 }
 
+export function readFileBuffer(file) {
+  return new Promise((resolve, reject) => {
+    const r = new FileReader();
+    r.onload = () => resolve(r.result);
+    r.onerror = () => reject(r.error);
+    r.readAsArrayBuffer(file);
+  });
+}
+
 export const safeName = (s) => String(s || 'export').replace(/[\\/:*?"<>|\s]+/g, '_').slice(0, 60);

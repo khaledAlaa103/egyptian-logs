@@ -45,6 +45,16 @@ export default {
     new: 'New project', edit: 'Edit project', name: 'Project name', client: 'Client',
     description: 'Description', empty: 'No projects. Create one to start adding wells.',
     exportJson: 'Export JSON', importJson: 'Import JSON', importDone: 'Project imported as a new project.',
+    importExcel: 'Import project from Excel', exportExcel: 'Export Excel', template: 'Blank Excel template',
+    excelDone: 'New project created: {w} well(s), {c} curve(s), {f} formation(s).',
+    excelRenamed: 'Existing well IDs were renamed: {list}.', excelSkipped: 'Rows skipped because of errors: {n}.',
+    excelHint: 'Workbook sheets: Project (Name, Client, Description), Wells, Logs (Well ID, Depth (m), then curves with the unit in brackets, e.g. GR (gAPI)) and Formations. JSON files are still accepted for full copies.',
+    excelErr: {
+      unreadable: 'The Excel file could not be read.', no_project_sheet: 'Sheet "Project" is missing.',
+      no_project_name: 'Project name is missing in sheet Project.', no_wells_sheet: 'Sheet "Wells" is missing.',
+      no_wells: 'No wells in sheet Wells.', well_row: 'Invalid well data', log_unknown_well: 'Sheet Logs refers to a well that is not in Wells',
+      log_blocking: 'Sheet Logs: depth column or a curve unit is missing/unknown',
+    },
     confirmDelete: 'Delete project "{name}" and its {n} well(s) with all their data? This cannot be undone.',
   },
   wells: {

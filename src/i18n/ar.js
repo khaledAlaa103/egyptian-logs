@@ -45,6 +45,16 @@ export default {
     new: 'مشروع جديد', edit: 'تعديل المشروع', name: 'اسم المشروع', client: 'العميل',
     description: 'الوصف', empty: 'لا توجد مشاريع. أنشئ مشروعًا لبدء إضافة الآبار.',
     exportJson: 'تصدير JSON', importJson: 'استيراد JSON', importDone: 'تم استيراد المشروع كمشروع جديد.',
+    importExcel: 'استيراد مشروع من Excel', exportExcel: 'تصدير Excel', template: 'نموذج Excel فارغ',
+    excelDone: 'تم إنشاء مشروع جديد: {w} بئر، {c} منحنى، {f} تكوين.',
+    excelRenamed: 'أُعيدت تسمية آبار موجودة مسبقًا: {list}.', excelSkipped: 'صفوف تم تجاهلها بسبب أخطاء: {n}.',
+    excelHint: 'الملف يحتوي أوراق: Project (الاسم، العميل، الوصف) و Wells و Logs (Well ID، Depth (m)، ثم المنحنيات مع الوحدة بين قوسين مثل GR (gAPI)) و Formations. ملف JSON ما زال مقبولًا للنسخ الكاملة.',
+    excelErr: {
+      unreadable: 'تعذّرت قراءة ملف Excel.', no_project_sheet: 'ورقة "Project" غير موجودة.',
+      no_project_name: 'اسم المشروع مفقود في ورقة Project.', no_wells_sheet: 'ورقة "Wells" غير موجودة.',
+      no_wells: 'لا توجد آبار في ورقة Wells.', well_row: 'بيانات بئر غير صالحة', log_unknown_well: 'ورقة Logs تشير إلى بئر غير موجود في Wells',
+      log_blocking: 'ورقة Logs: عمود العمق أو وحدة منحنى مفقودة/غير معروفة',
+    },
     confirmDelete: 'حذف المشروع "{name}" وآباره ({n}) مع جميع بياناتها؟ لا يمكن التراجع.',
   },
   wells: {

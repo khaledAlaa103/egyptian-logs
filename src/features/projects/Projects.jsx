@@ -6,9 +6,13 @@ import {
   duplicateProject, exportProject, importProject,
 } from '../../db/repos.js';
 import { validateProject } from '../wells/validate.js';
-import { downloadFile, readFileText, safeName } from '../../io/download.js';
+import { downloadFile, readFileText, readFileBuffer, safeName } from '../../io/download.js';
 import { usePrefs } from '../../app/PrefsContext.jsx';
 import Modal from '../../design/Modal.jsx';
+import { projectToWorkbook, parseProjectWorkbook, templateWorkbook } from '../../io/projectExcel.js';
+import { importProjectExcel } from '../../db/projectExcelImport.js';
+
+const XLSX_MIME = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
 
 const EMPTY = { name: '', client: '', description: '' };
 
@@ -53,15 +57,40 @@ export default function Projects() {
     downloadFile(`${safeName(p.name)}.welllog.json`, JSON.stringify(bundle, null, 2), 'application/json');
   };
 
+  const saveXlsx = (name, buf) => downloadFile(name, new Blob([buf], { type: XLSX_MIME }));
+  const doExportExcel = async (p) => saveXlsx(`${safeName(p.name)}.xlsx`, projectToWorkbook(await exportProject(p.id)));
+  const doTemplate = () => saveXlsx('welllog-project-template.xlsx', templateWorkbook());
+
+  const excelError = (err) => {
+    const [, code, ...rest] = String(err.message).split(':');
+    const base = t(`projects.excelErr.${code}`);
+    const extra = rest.filter(Boolean);
+    return base.startsWith('projects.') ? t('err.invalidFile') : `${base}${extra.length ? ` — ${extra.join(' · ')}` : ''}`;
+  };
+
   const doImport = async (e) => {
     const file = e.target.files?.[0];
     e.target.value = '';
     if (!file) return;
+    if (/\.json$/i.test(file.name)) {
+      try {
+        await importProject(JSON.parse(await readFileText(file)));
+        setMsg({ ok: true, text: t('projects.importDone') });
+      } catch (err) {
+        setMsg({ ok: false, text: err.message === 'NEWER_VERSION' ? t('err.newerVersion') : t('err.invalidFile') });
+      }
+      return;
+    }
     try {
-      await importProject(JSON.parse(await readFileText(file)));
-      setMsg({ ok: true, text: t('projects.importDone') });
+      const parsed = parseProjectWorkbook(await readFileBuffer(file));
+      const r = await importProjectExcel(parsed, { sourceName: file.name });
+      const skipped = parsed.warnings.reduce((s, w) => s + (w.n || 1), 0);
+      const parts = [t('projects.excelDone').replace('{w}', r.wells).replace('{c}', r.curves).replace('{f}', r.formations)];
+      if (r.renamed.length) parts.push(t('projects.excelRenamed').replace('{list}', r.renamed.map(([a, b]) => `${a} → ${b}`).join(', ')));
+      if (skipped) parts.push(t('projects.excelSkipped').replace('{n}', skipped));
+      setMsg({ ok: true, text: parts.join(' ') });
     } catch (err) {
-      setMsg({ ok: false, text: err.message === 'NEWER_VERSION' ? t('err.newerVersion') : t('err.invalidFile') });
+      setMsg({ ok: false, text: String(err.message).startsWith('EXCEL_INVALID') ? excelError(err) : t('err.invalidFile') });
     }
   };
 
@@ -75,11 +104,13 @@ export default function Projects() {
           <button className="btn primary" onClick={() => { setErrors({}); setForm({ ...EMPTY }); }}>
             + {t('projects.new')}
           </button>
-          <button className="btn" onClick={() => fileRef.current.click()}>{t('projects.importJson')}</button>
-          <input ref={fileRef} type="file" accept=".json,application/json" hidden onChange={doImport}
-            aria-label={t('projects.importJson')} />
+          <button className="btn" onClick={() => fileRef.current.click()}>{t('projects.importExcel')}</button>
+          <button className="btn" onClick={doTemplate}>{t('projects.template')}</button>
+          <input ref={fileRef} type="file" accept=".xlsx,.xls,.json" hidden onChange={doImport}
+            aria-label={t('projects.importExcel')} />
         </div>
       </div>
+      <p className="muted small">{t('projects.excelHint')}</p>
 
       {msg && <div className={`notice ${msg.ok ? 'ok' : 'bad'}`} role="status">{msg.text}</div>}
 
@@ -109,6 +140,7 @@ export default function Projects() {
                 <button className="btn sm" onClick={() => setProjectArchived(p.id, p.status !== 'archived')}>
                   {p.status === 'archived' ? t('common.unarchive') : t('common.archive')}
                 </button>
+                <button className="btn sm" onClick={() => doExportExcel(p)}>{t('projects.exportExcel')}</button>
                 <button className="btn sm" onClick={() => doExport(p)}>{t('projects.exportJson')}</button>
                 <button className="btn sm danger" onClick={() => remove(p)}>{t('common.delete')}</button>
               </div>
